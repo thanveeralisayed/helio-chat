@@ -2,11 +2,14 @@ import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 import { Link } from 'react-router-dom';
 import RoomList from '../Room/RoomList';
-import  io  from 'socket.io-client';
+import io from 'socket.io-client';
 let socket;
 
 const Home = () => {
     const ENDPT = 'localhost:5000';
+    const { user, setUser } = useContext(UserContext);
+    const [room, setRoom] = useState('');
+    const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
         socket = io(ENDPT);
@@ -14,14 +17,23 @@ const Home = () => {
             socket.emit('disconnect');
             socket.off();
         }
-    }, [ENDPT])
+    }, [rooms])
 
-    const { user, setUser } = useContext(UserContext);
-    const [room, setRoom] = useState('');
+    useEffect(() => {
+       socket.on('room-created',room=>{
+           setRooms([...rooms,room]);
+       })
+    }, [rooms])
+
+    useEffect(() => {
+        socket.on('output-rooms',rooms=>{
+            setRooms(rooms)
+        })
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        socket.emit('create-room',room)
+        socket.emit('create-room', room)
         console.log(room)
     }
 
@@ -46,20 +58,6 @@ const Home = () => {
     }
 
 
-    const rooms = [
-        {
-            _id: 1,
-            name: 'room1'
-        },
-        {
-            _id: 2,
-            name: 'room2'
-        },
-        {
-            _id: 3,
-            name: 'room3'
-        }
-    ]
 
 
     return (
@@ -69,11 +67,11 @@ const Home = () => {
                 <div className="col-md-6">
                     <div className="card" style={{ width: '18rem' }}>
                         <div className="card-body">
-                            <h5 className="card-title">Join Room</h5>
+                            <h5 className="card-title">Create Room</h5>
                             <div className="card-text">
                                 <form onSubmit={handleSubmit}>
                                     <div className="mb-3">
-                                        <label htmlFor="exampleInputEmail1" className="form-label">Enter the room name</label>
+                                        <label htmlFor="exampleInputEmail1" className="form-label">Give a name for your room</label>
                                         <input type="text" className="form-control" id="roomname"
                                             onChange={(e) => setRoom(e.target.value)}
                                         />
