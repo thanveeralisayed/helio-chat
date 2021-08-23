@@ -15,4 +15,12 @@ const addUser = ({ socket_id, name, user_id, room_id }) => {
     }
 }
 
+const removeUser = (socket_id) => {
+    const index = users.findIndex(user=>user.socket_id === socket_id);
+    if(index !== -1)
+    {
+        return users.splice(index,1)[0];
+    }
+}
+
 module.exports = { addUser }
