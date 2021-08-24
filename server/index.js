@@ -1,4 +1,6 @@
 const app = require('express')();
+const authRoutes = require('./routes/authRoutes');
+app.use(authRoutes);
 const http = require('http').createServer(app);
 const mongoose = require('mongoose');
 const socketio = require('socket.io');
