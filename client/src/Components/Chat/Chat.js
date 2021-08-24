@@ -15,9 +15,9 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     useEffect(() => {
         socket = io(ENDPT);
-        const tuser = { name: user.name, room_id: room_id, user_id: user.id };
+        const tuser = { name: user.name, room_id: room_id, user_id: user._id };
         console.log(tuser);
-        socket.emit('join', { name: user.name, room_id: room_id, user_id: user.id });
+        socket.emit('join', { name: user.name, room_id: room_id, user_id: user._id });
     }, []);
 
     useEffect(() => {
