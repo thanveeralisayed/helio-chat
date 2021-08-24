@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import './Chat.css'
 import Room from './Room/Room';
+import Input from './Input/Input';
 let socket;
 
 
@@ -40,23 +41,7 @@ const Chat = () => {
             <div className="row justify-content-center">
                 <div className="main">
                     <Room messages={messages} />
-
-                    <form onSubmit = {sendMessage}>
-                        <nav className="navbar bg-white navbar-expand-sm d-flex justify-content-between">
-                            <input
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                name="" id="" onKeyPress={(e) => e.key === 'Enter' ? sendMessage(e) : null}
-                                type="text number" className="form-control" placeholder="Type a message..." />
-                                <div className="d-flex justify-content-end align-content-center text-center ml-2">
-                                    <button className="btn btn-success">Send</button>
-                                     </div>
-                        </nav>
-                    </form>
-
-
-
-
+                    <Input sendMessage={sendMessage} setMessage={setMessage} message={message} />
                 </div>
             </div>
         </div>
